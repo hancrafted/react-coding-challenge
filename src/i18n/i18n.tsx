@@ -14,8 +14,9 @@ export interface Language {
 }
 
 const getBrowserLanguage = () => {
-  // @ts-ignore
-  const userLang = navigator.language || navigator.userLanguage;
+  const userLang =
+    navigator.language ||
+    (navigator as Navigator & { userLanguage?: string }).userLanguage;
 
   return userLang ? userLang.split("-")[0] : FALLBACK_LANGUAGE;
 };

@@ -22,7 +22,7 @@ interface AvatarMenuProps {
 const getInitials = (user: User) => {
   if (user.firstName || user.lastName) {
     const initials = [user.firstName, user.lastName]
-      .map((_) => (_[0] ? _[0].toLocaleUpperCase() : _))
+      .map((part) => (part?.[0] ? part[0].toLocaleUpperCase() : ""))
       .join("");
     return initials;
   }
@@ -35,7 +35,7 @@ const stringAvatar = (user: User) => {
   const r = Math.floor(parseInt(initials[0] ? initials[0] : "k", 36) * 7);
   const g = Math.floor(parseInt(initials[1] ? initials[1] : "l", 36) * 7);
   const b = Math.floor(
-    parseInt(user?.firstName[1] ? user?.firstName[1] : "m", 36) * 7
+    parseInt(user?.firstName?.[1] ? user?.firstName?.[1] : "m", 36) * 7
   );
   return {
     sx: { bgcolor: `rgb(${r},${g},${b})`, cursor: "pointer" },
@@ -56,7 +56,6 @@ const AvatarMenu = React.forwardRef<HTMLDivElement, AvatarMenuProps>(
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // const history = useHistory();
 
   return (
     <div ref={ref}>
@@ -82,12 +81,7 @@ const AvatarMenu = React.forwardRef<HTMLDivElement, AvatarMenuProps>(
             {user.eMail}
           </Typography>
           <Box m={1} />
-          <Button
-            // onClick={() => history.push(ERoute.SETTINGS_ACCOUNT)}
-            variant="outlined"
-            color="primary"
-            size="medium"
-          >
+          <Button variant="outlined" color="primary" size="medium">
             Edit Profile
           </Button>
         </Box>
@@ -99,12 +93,7 @@ const AvatarMenu = React.forwardRef<HTMLDivElement, AvatarMenuProps>(
           justifyContent="center"
           style={{ color: theme.palette.grey[500] }}
         >
-          <Button
-            // onClick={() => history.push(ERoute.SETTINGS_DETAILS)}
-            color="inherit"
-            variant="text"
-            size="small"
-          >
+          <Button color="inherit" variant="text" size="small">
             <Icon path={mdiTag} size={0.75} />
             <Box m={0.5} />
             Edit Organization
@@ -113,7 +102,7 @@ const AvatarMenu = React.forwardRef<HTMLDivElement, AvatarMenuProps>(
         <Divider />
         <Box display="flex" flexDirection="column" alignItems="center" p={2}>
           <Tooltip title={<Box>{t("logout")}</Box>}>
-            <Button onClick={() => console.log("logout")} variant="text">
+            <Button variant="text">
               <Icon path={mdiLogoutVariant} size={1} />
               <Box m={0.5} />
               {t("logout")}

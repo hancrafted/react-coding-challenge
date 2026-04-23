@@ -103,7 +103,7 @@ const useMatchedRoute = (
     MatchedElement: (
       <Switch>
         {matchOnSubPath &&
-          routes.map(({ path, Component: RouteComponent }, i) => (
+          routes.map(({ path, Component: RouteComponent }) => (
             <Route
               key={path + "matchOnSubPath"}
               path={`/${path.split("/").slice(1, 2)}/*`}
@@ -115,7 +115,7 @@ const useMatchedRoute = (
               )}
             </Route>
           ))}
-        {routes.map(({ path, Component: RouteComponent }, i) => (
+        {routes.map(({ path, Component: RouteComponent }) => (
           <Route key={path + "root"} sensitive strict exact path={path}>
             {({ match }) => (
               <Transition match={match}>

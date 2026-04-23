@@ -7,7 +7,6 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TRoute } from "../../types/global";
-import { resultOrError } from "../../utils/global";
 import AccessDenied from "../AccessDenied";
 import { routes as useRoutes } from "../routes";
 
@@ -27,7 +26,6 @@ const Root = () => {
   const userStore = useUserStore();
   const { user } = userStore || {};
   const theme = useTheme();
-  console.log(user);
   const routes = [...useRoutes] as readonly TRoute[];
   const [fallbackRoute] = routes;
   const Fallback = fallbackRoute.Component;
