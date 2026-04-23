@@ -6,43 +6,56 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { useTranslation } from "react-i18next";
 
+interface Issue {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+const issues: Issue[] = [
+  {
+    id: "missing-key-prop",
+    icon: "🐞",
+    title:
+      'Console error: Warning: Each child in a list should have a unique "key" prop.',
+    description:
+      "Hope you are able to find what is causing this error, as it is annoying."
+  },
+  {
+    id: "bold-known",
+    icon: "🐞",
+    title:
+      'The word "known" should be displayed bold in the introduction text.',
+    description:
+      "When implementing a solution, please ensure to not change the i18n text."
+  },
+  {
+    id: "missing-user-avatar",
+    icon: "🐞",
+    title:
+      "User avatar in app bar is missing, although user should be fetched on app start correctly.",
+    description:
+      "On app start we load the current user object via a MobX store, but for any reason the user avatar is not displayed in the top right of the app bar. Attention: When solving this issue, you might will be confronted with a second bug."
+  },
+  {
+    id: "broken-countdown",
+    icon: "🐞",
+    title: "Optional: Countdown is broken sometimes (hard to reproduce).",
+    description:
+      "Some developers mentioned that the countdown in the app header behaves strange sometimes, but unfortunately they were not able to reproduce this glitch reliably, maybe you find the root cause."
+  },
+  {
+    id: "language-switcher",
+    icon: "⭐️",
+    title: "Optional: It would be great to be able to switch the language.",
+    description:
+      "Please add a language select control in the app bar to swicth the UI language between english and german."
+  }
+];
+
 const Home = () => {
   const { t } = useTranslation("app");
-  const issues = [
-    {
-      icon: "🐞",
-      title:
-        'Console error: Warning: Each child in a list should have a unique "key" prop.',
-      description:
-        "Hope you are able to find what is causing this error, as it is annoying."
-    },
-    {
-      icon: "🐞",
-      title:
-        'The word "known" should be displayed bold in the introduction text.',
-      description:
-        "When implementing a solution, please ensure to not change the i18n text."
-    },
-    {
-      icon: "🐞",
-      title:
-        "User avatar in app bar is missing, although user should be fetched on app start correctly.",
-      description:
-        "On app start we load the current user object via a MobX store, but for any reason the user avatar is not displayed in the top right of the app bar. Attention: When solving this issue, you might will be confronted with a second bug."
-    },
-    {
-      icon: "🐞",
-      title: "Optional: Countdown is broken sometimes (hard to reproduce).",
-      description:
-        "Some developers mentioned that the countdown in the app header behaves strange sometimes, but unfortunately they were not able to reproduce this glitch reliably, maybe you find the root cause."
-    },
-    {
-      icon: "⭐️",
-      title: "Optional: It would be great to be able to switch the language.",
-      description:
-        "Please add a language select control in the app bar to swicth the UI language between english and german."
-    }
-  ];
 
   return (
     <Box p={2} maxHeight="calc(100vh - 64px)" overflow={["auto", "auto"]}>
@@ -58,7 +71,7 @@ const Home = () => {
         </Typography>
         <List>
           {issues.map((issue) => (
-            <ListItem>
+            <ListItem key={issue.id}>
               <Typography variant="h5" sx={{ p: 2 }}>
                 {issue.icon}
               </Typography>
