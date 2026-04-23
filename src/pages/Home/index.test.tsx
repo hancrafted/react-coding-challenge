@@ -31,4 +31,24 @@ describe("Home page list", () => {
 
     expect(keyWarning).toBeUndefined();
   });
+
+  it("renders the word \"known\" in the intro as a <strong> element", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+
+    act(() => {
+      ReactDOM.render(<Home />, container);
+    });
+
+    const strong = Array.from(container.querySelectorAll("strong")).find(
+      (el) => el.textContent === "known"
+    );
+
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
+
+    expect(strong).toBeDefined();
+  });
 });

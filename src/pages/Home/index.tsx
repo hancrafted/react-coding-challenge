@@ -4,7 +4,7 @@ import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 interface Issue {
   id: string;
@@ -64,7 +64,7 @@ const Home = () => {
           {t("home.welcome")}
         </Typography>
         <Typography variant="subtitle1" textAlign="center">
-          {t("home.intro")}{" "}
+          <Trans i18nKey="home.intro" components={{ b: <strong /> }} />{" "}
         </Typography>
         <Typography variant="body2" textAlign="center" color="textSecondary">
           {t("home.sidenote")}
