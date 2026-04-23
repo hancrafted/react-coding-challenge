@@ -1,0 +1,12 @@
+{
+  "logout": "Logout",
+  "appTitle": "Supplier OS Application",
+  "routes": {
+    "/home": "Bug Bounty Challenge"
+  },
+  "home": {
+    "welcome": "Welcome!",
+    "intro": "This is a demo application with some glitches and bugs, where we hope that you can finde them. 😃 Here the list of <b>known</b> issues:",
+    "sidenote": "All bugs have a different level of complexity and all of them are pretty common (real wolrd problems for any react developer). To solve all open points a different set of skills are required: googling, experience, reading docs and error messages, creativity and analytical thinking."
+  }
+}
