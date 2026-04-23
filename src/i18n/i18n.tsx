@@ -5,6 +5,7 @@ import de from "./locales/de.json";
 import en from "./locales/en.json";
 
 export const FALLBACK_LANGUAGE = "en";
+export const LANGUAGE_STORAGE_KEY = "app.language";
 
 export interface Language {
   locale: string;
@@ -19,7 +20,17 @@ const getBrowserLanguage = () => {
   return userLang ? userLang.split("-")[0] : FALLBACK_LANGUAGE;
 };
 
+const getPersistedLanguage = (): string | null => {
+  try {
+    if (typeof window === "undefined") return null;
+    return window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
 const browserLanguage = getBrowserLanguage();
+const persistedLang = getPersistedLanguage();
 
 export const defaultTranslationModules = [
   { locale: "de", texts: de },
@@ -43,7 +54,7 @@ i18n
     resources,
     ns: ["common", "app"],
     defaultNS: "app",
-    lng: FALLBACK_LANGUAGE || browserLanguage,
+    lng: persistedLang ?? browserLanguage ?? FALLBACK_LANGUAGE,
     fallbackLng: FALLBACK_LANGUAGE,
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default
