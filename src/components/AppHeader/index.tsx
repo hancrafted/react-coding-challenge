@@ -29,23 +29,25 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
   height: theme.tokens.header.height
 }));
 
+const COUNTDOWN_SECONDS = 60 * 60;
+
 const AppHeader = React.forwardRef((props: AppHeaderProps, ref) => {
   const { user, pageTitle } = props;
   const { t } = useTranslation("app");
   const theme = useTheme();
 
-  const [count, setCount] = useState(0);
-  const hours = 1;
-  const minutes = hours * 60;
-  const seconds = minutes * 60;
-  const countdown = seconds - count;
-  const countdownMinutes = `${~~(countdown / 60)}`.padStart(2, "0");
-  const countdownSeconds = (countdown % 60).toFixed(0).padStart(2, "0");
+  const [remainingSeconds, setRemainingSeconds] = useState(COUNTDOWN_SECONDS);
+  const countdownMinutes = `${Math.floor(remainingSeconds / 60)}`.padStart(2, "0");
+  const countdownSeconds = `${remainingSeconds % 60}`.padStart(2, "0");
 
   useEffect(() => {
-    setInterval(() => {
-      setCount((c) => c + 1);
-    }, 1000);
+    const deadline = Date.now() + COUNTDOWN_SECONDS * 1000;
+    const tick = () => {
+      const msLeft = Math.max(0, deadline - Date.now());
+      setRemainingSeconds(Math.ceil(msLeft / 1000));
+    };
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
   }, []);
 
   return (
