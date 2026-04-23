@@ -45,7 +45,7 @@ export default class UserStore {
 
     if (result) {
       runInAction(() => {
-        this.urser = result;
+        this.user = result;
       });
 
       return {
