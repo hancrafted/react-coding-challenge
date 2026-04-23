@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "@mui/material/styles";
 import { osapiens } from "../../themes";
-import "../../i18n";
+import i18n, { LANGUAGE_STORAGE_KEY } from "../../i18n";
 import AppHeader from "./index";
 
 // AppHeader's countdown must be driven by a wall-clock deadline, not by a
@@ -111,5 +111,114 @@ describe("AppHeader countdown", () => {
     );
     warnSpy.mockRestore();
     expect(leak).toBeUndefined();
+  });
+});
+
+// Issue #5: EN/DE language switcher to the left of the avatar. Pins the
+// behaviour contract: DOM placement, menu contents, persistence, and that the
+// switcher reflects the i18n instance's current language on mount.
+describe("AppHeader language switcher", () => {
+  let container: HTMLElement;
+
+  const mount = () => {
+    act(() => {
+      ReactDOM.render(
+        <ThemeProvider theme={osapiens.light}>
+          <AppHeader user={user} pageTitle="Home" />
+        </ThemeProvider>,
+        container
+      );
+    });
+  };
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    window.localStorage.clear();
+    act(() => {
+      i18n.changeLanguage("en");
+    });
+  });
+
+  afterEach(() => {
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
+    // Close any open MUI Menu portals between tests.
+    document
+      .querySelectorAll(".MuiPopover-root, .MuiModal-root")
+      .forEach((n) => n.parentElement?.removeChild(n));
+    window.localStorage.clear();
+    act(() => {
+      i18n.changeLanguage("en");
+    });
+  });
+
+  it("renders a language switcher before the avatar with the current locale label", () => {
+    mount();
+    const switcher = container.querySelector(
+      "[aria-label='change language']"
+    ) as HTMLElement | null;
+    const avatar = container.querySelector(".MuiAvatar-root");
+
+    expect(switcher).not.toBeNull();
+    expect(avatar).not.toBeNull();
+    expect(switcher!.textContent).toBe("EN");
+    // Switcher must sit *before* the avatar in document order.
+    const rel = switcher!.compareDocumentPosition(avatar!);
+    expect(rel & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  // MUI's Select display element opens on mousedown (not click), so tests
+  // dispatch a bubbling MouseEvent that React's delegated listener can catch.
+  const openSelect = (el: HTMLElement) => {
+    act(() => {
+      el.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    });
+  };
+
+  it("opens a menu exposing EN and DE options (two-letter labels, no flags)", () => {
+    mount();
+    const switcher = container.querySelector(
+      "[aria-label='change language']"
+    ) as HTMLElement;
+
+    openSelect(switcher);
+
+    const labels = Array.from(
+      document.querySelectorAll(".MuiMenuItem-root")
+    ).map((el) => (el.textContent || "").trim());
+    expect(labels).toEqual(expect.arrayContaining(["EN", "DE"]));
+  });
+
+  it("persists selection to localStorage and switches i18n language when DE is chosen", () => {
+    mount();
+    const switcher = container.querySelector(
+      "[aria-label='change language']"
+    ) as HTMLElement;
+    openSelect(switcher);
+
+    const deItem = Array.from(
+      document.querySelectorAll(".MuiMenuItem-root")
+    ).find((el) => (el.textContent || "").trim() === "DE") as HTMLElement;
+
+    act(() => {
+      deItem.click();
+    });
+
+    expect(window.localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe("de");
+    expect(i18n.language).toBe("de");
+  });
+
+  it("reflects the currently active language in its label (DE after switching)", () => {
+    act(() => {
+      i18n.changeLanguage("de");
+    });
+    mount();
+    const switcher = container.querySelector(
+      "[aria-label='change language']"
+    ) as HTMLElement;
+    expect(switcher.textContent).toBe("DE");
   });
 });

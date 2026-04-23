@@ -1,10 +1,84 @@
-import { Grow, Box, Theme, Toolbar, Typography } from "@mui/material";
+import { Grow, Box, FormControl, Theme, Toolbar, Typography } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { styled, useTheme } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "../../api/services/User/store";
+import { LANGUAGE_STORAGE_KEY } from "../../i18n";
 import AvatarMenu from "../AvatarMenu";
+
+const SUPPORTED_LOCALES = ["en", "de"] as const;
+type Locale = typeof SUPPORTED_LOCALES[number];
+
+// Persist the active locale without pulling in i18next-browser-languagedetector
+// (issue #5 forbids new runtime deps). Swallow failures so the UI keeps working
+// in Safari private mode where localStorage.setItem throws.
+const persistLocale = (locale: Locale) => {
+  try {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, locale);
+  } catch {
+    /* storage unavailable — selection still applies for this session */
+  }
+};
+
+const LanguageSwitcher = () => {
+  const { i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const current = ((i18n.language || "en").split("-")[0] || "en") as Locale;
+
+  const handleChange = (event: SelectChangeEvent) => {
+    const locale = event.target.value as Locale;
+    i18n.changeLanguage(locale);
+    persistLocale(locale);
+  };
+
+  // Controlled open state: if MUI's internal onMouseDown on the select display
+  // is ever intercepted (e.g. a parent stopping propagation, or the display div
+  // collapsing to zero hit-area in a flex parent), the Box's onMouseDown below
+  // still guarantees the dropdown opens. The <Select> sees the open prop and
+  // renders its Popover.
+  return (
+    <Box
+      onMouseDown={(e) => {
+        // Only left button; don't interfere when clicking inside the menu itself.
+        if (e.button === 0) setOpen(true);
+      }}
+      sx={{ display: "inline-flex", cursor: "pointer" }}
+    >
+      <FormControl variant="standard" size="small" sx={{ minWidth: 64 }}>
+        <Select
+          variant="standard"
+          open={open}
+          onOpen={() => setOpen(true)}
+          onClose={() => setOpen(false)}
+          value={current}
+          onChange={handleChange}
+          disableUnderline
+          SelectDisplayProps={{ "aria-label": "change language" }}
+          sx={{
+            color: "inherit",
+            fontWeight: 600,
+            fontSize: 14,
+            "& .MuiSelect-icon": { color: "inherit" },
+            "& .MuiSelect-select": {
+              paddingY: "6px",
+              paddingRight: "24px !important",
+              minHeight: "auto"
+            }
+          }}
+        >
+          {SUPPORTED_LOCALES.map((loc) => (
+            <MenuItem key={loc} value={loc}>
+              {loc.toUpperCase()}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
 
 interface AppBarProps extends MuiAppBarProps {
   theme?: Theme;
@@ -81,7 +155,16 @@ const AppHeader = React.forwardRef((props: AppHeaderProps, ref) => {
               {pageTitle.toLocaleUpperCase()}
             </Typography>
           </Box>
-          <Box sx={{ flex: 1, justifyContent: "flex-end", display: "flex" }}>
+          <Box
+            sx={{
+              flex: 1,
+              justifyContent: "flex-end",
+              display: "flex",
+              alignItems: "center",
+              gap: 1
+            }}
+          >
+            <LanguageSwitcher />
             {user && user.eMail && (
               <Grow in={Boolean(user && user.eMail)}>
                 <AvatarMenu user={user} />
