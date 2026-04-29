@@ -16,7 +16,7 @@ interface Issue {
 const issues: Issue[] = [
   {
     id: "missing-key-prop",
-    icon: "🐞",
+    icon: "✅",
     title:
       'Console error: Warning: Each child in a list should have a unique "key" prop.',
     description:
@@ -24,7 +24,7 @@ const issues: Issue[] = [
   },
   {
     id: "bold-known",
-    icon: "🐞",
+    icon: "✅",
     title:
       'The word "known" should be displayed bold in the introduction text.',
     description:
@@ -32,7 +32,7 @@ const issues: Issue[] = [
   },
   {
     id: "missing-user-avatar",
-    icon: "🐞",
+    icon: "✅",
     title:
       "User avatar in app bar is missing, although user should be fetched on app start correctly.",
     description:
@@ -40,14 +40,14 @@ const issues: Issue[] = [
   },
   {
     id: "broken-countdown",
-    icon: "🐞",
+    icon: "✅",
     title: "Optional: Countdown is broken sometimes (hard to reproduce).",
     description:
       "Some developers mentioned that the countdown in the app header behaves strange sometimes, but unfortunately they were not able to reproduce this glitch reliably, maybe you find the root cause."
   },
   {
     id: "language-switcher",
-    icon: "⭐️",
+    icon: "✅",
     title: "Optional: It would be great to be able to switch the language.",
     description:
       "Please add a language select control in the app bar to switch the UI language between english and german."
