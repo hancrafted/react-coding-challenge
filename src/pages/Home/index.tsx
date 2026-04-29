@@ -139,6 +139,13 @@ const additionalFixes: Issue[] = [
       "Added missing eslintConfig in package.json so CRA's ESLint understands TypeScript.",
     description:
       "Without the 'react-app' / 'react-app/jest' extends, ESLint fell back to a plain-JS parser and reported 'Parsing error: Missing semicolon.' on every `as`, `declare module`, and type predicate. The dev server forwarded the failed compile into the browser console together with a 'process is not defined' error from the HMR client; both are gone now that the app compiles."
+  },
+  {
+    id: "npm-audit-react-scripts-5",
+    icon: "✅",
+    title: "npm audit: upgraded react-scripts 4 → 5 and patched direct deps.",
+    description:
+      "All 7 critical and most high vulnerabilities are gone (0 critical, 11 high remain — all dev-only build tools transitively pulled in by react-scripts 5 itself, with no upstream fix without leaving CRA)."
   }
 ];
 
