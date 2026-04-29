@@ -24,5 +24,3 @@ HOOK DEFINITION
 */
 
 export const useUserStore = () => useContext(UserStoreContext);
-
-export default StoreProvider;

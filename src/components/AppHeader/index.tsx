@@ -105,7 +105,7 @@ const AppBar = styled(MuiAppBar)<AppBarProps>(({ theme }) => ({
 
 const COUNTDOWN_SECONDS = 60 * 60;
 
-const AppHeader = React.forwardRef<HTMLDivElement, AppHeaderProps>((props, ref) => {
+const AppHeader = React.forwardRef((props: AppHeaderProps, ref) => {
   const { user, pageTitle } = props;
   const { t } = useTranslation("app");
   const theme = useTheme();

@@ -16,7 +16,7 @@ interface Issue {
 const issues: Issue[] = [
   {
     id: "missing-key-prop",
-    icon: "✅",
+    icon: "🐞",
     title:
       'Console error: Warning: Each child in a list should have a unique "key" prop.',
     description:
@@ -24,7 +24,7 @@ const issues: Issue[] = [
   },
   {
     id: "bold-known",
-    icon: "✅",
+    icon: "🐞",
     title:
       'The word "known" should be displayed bold in the introduction text.',
     description:
@@ -32,7 +32,7 @@ const issues: Issue[] = [
   },
   {
     id: "missing-user-avatar",
-    icon: "✅",
+    icon: "🐞",
     title:
       "User avatar in app bar is missing, although user should be fetched on app start correctly.",
     description:
@@ -40,14 +40,14 @@ const issues: Issue[] = [
   },
   {
     id: "broken-countdown",
-    icon: "✅",
+    icon: "🐞",
     title: "Optional: Countdown is broken sometimes (hard to reproduce).",
     description:
       "Some developers mentioned that the countdown in the app header behaves strange sometimes, but unfortunately they were not able to reproduce this glitch reliably, maybe you find the root cause."
   },
   {
     id: "language-switcher",
-    icon: "✅",
+    icon: "⭐️",
     title: "Optional: It would be great to be able to switch the language.",
     description:
       "Please add a language select control in the app bar to switch the UI language between english and german."
@@ -139,13 +139,6 @@ const additionalFixes: Issue[] = [
       "Added missing eslintConfig in package.json so CRA's ESLint understands TypeScript.",
     description:
       "Without the 'react-app' / 'react-app/jest' extends, ESLint fell back to a plain-JS parser and reported 'Parsing error: Missing semicolon.' on every `as`, `declare module`, and type predicate. The dev server forwarded the failed compile into the browser console together with a 'process is not defined' error from the HMR client; both are gone now that the app compiles."
-  },
-  {
-    id: "npm-audit-react-scripts-5",
-    icon: "✅",
-    title: "npm audit: upgraded react-scripts 4 → 5 and patched direct deps.",
-    description:
-      "All 7 critical and most high vulnerabilities are gone (0 critical, 11 high remain — all dev-only build tools transitively pulled in by react-scripts 5 itself, with no upstream fix without leaving CRA)."
   }
 ];
 
